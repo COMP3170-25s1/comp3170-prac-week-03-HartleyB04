@@ -29,6 +29,8 @@ public class Scene {
 	private Vector3f[] colours;
 	private int colourBuffer;
 
+	private Matrix4f matrix; // create object matrix
+	
 	private Shader shader;
 
 	public Scene() {
@@ -77,6 +79,12 @@ public class Scene {
 			// @formatter:on
 
 		indexBuffer = GLBuffers.createIndexBuffer(indices);
+		
+		Matrix4f temp = new Matrix4f(); // create matrix object to pass through
+		matrix = new Matrix4f(); // matrix object
+		matrix.mul(translationMatrix(-0.75f, 0.7f, temp)); // for each transformation matrix 
+		matrix.mul(rotationMatrix(0.75f, temp));
+		matrix.mul(scaleMatrix(0.4f, 0.4f, temp));
 
 	}
 
@@ -87,6 +95,8 @@ public class Scene {
 		shader.setAttribute("a_position", vertexBuffer);
 		shader.setAttribute("a_colour", colourBuffer);
 
+		shader.setUniform("u_matrix", matrix); // set uniform in draw
+		
 		// draw using index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		
@@ -114,6 +124,9 @@ public class Scene {
 	    //     [ 0 0 0 0  ]
 		//     [ 0 0 0 1  ]
 
+		    // i          j          T
+		// (1, 0, 0,   0, 1, 0,  tx, ty, 1)
+		
 		// Perform operations on only the x and y values of the T vec. 
 		// Leaves the z value alone, as we are only doing 2D transformations.
 		
@@ -132,9 +145,23 @@ public class Scene {
 	 * @return
 	 */
 
-	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {
-
-		// TODO: Your code here
+	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {	
+		// clear the matrix to the rotation matrix 
+		dest.identity();
+		//
+		
+		// Set rotation components for Z-axis rotation
+	    // For a Z-axis rotation in a right-handed coordinate system:
+	    // [ cos(θ)  -sin(θ)  0  0 ]
+	    // [ sin(θ)   cos(θ)  0  0 ]
+	    // [   0        0     1  0 ]
+	    // [   0        0     0  1 ]
+		
+		dest.m00((float)Math.cos(angle));
+	    dest.m10((float)Math.sin(angle) * -1);
+	    dest.m01((float)Math.sin(angle));
+	    dest.m11((float)Math.cos(angle));
+		
 
 		return dest;
 	}
@@ -150,9 +177,18 @@ public class Scene {
 	 */
 
 	public static Matrix4f scaleMatrix(float sx, float sy, Matrix4f dest) {
-
-		// TODO: Your code here
-
+		// clear the matrix to the rotation matrix 
+		dest.identity();
+		
+		// S(Sx, Sy) = 
+		// [ Sx	0	0	0]
+		// [ 0	Sy	0	0]
+		// [ 0	0	1	0]
+		// [ 0	0	0	1]
+		
+		dest.m00(sx);
+		dest.m11(sy);
+		
 		return dest;
 	}
 
