@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL41.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import comp3170.OpenGLException;
 import comp3170.IWindowListener;
@@ -22,6 +23,8 @@ public class Week3 implements IWindowListener {
 	private int width = 800;
 	private int height = 800;
 	private Scene scene;
+	
+	private long oldTime;
 	
 	public Week3() throws OpenGLException  {
 		
@@ -44,16 +47,42 @@ public class Week3 implements IWindowListener {
 		// create the scene
 		scene = new Scene();
 		
+		oldTime = System.currentTimeMillis();
+		
+	}
+	
+//	private void update() {
+//		long time = System.currentTimeMillis();
+//		float deltaTime = (time - oldTime) / 1000f;
+//		oldTime = time;
+//		System.out.println("update: dt = " + deltaTime + "s");
+//
+//		scene.update(deltaTime);
+//	}
+
+	public void update() {
+		long time = System.currentTimeMillis();
+		float deltaTime = (time - oldTime) / 1000f;
+		oldTime = time;
+		scene.update(deltaTime);
 	}
 
 
 	@Override
 	public void draw() {
+		update();
 
         // clear the colour buffer
 		glClear(GL_COLOR_BUFFER_BIT);	
 		
 		scene.draw();
+		
+//		// restrict the framerate by sleeping between frames
+//				try {
+//					TimeUnit.MILLISECONDS.sleep(1000 / frameRate);
+//				} catch (InterruptedException e) {
+//				}
+
 	    
 	}
 
