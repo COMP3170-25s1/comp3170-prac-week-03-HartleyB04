@@ -102,24 +102,24 @@ public class Plane {
 
 //		Vector3f offset = new Vector3f(0.25f, 0.0f, 0.0f);
 //		float scale = 0.1f;
-//		float rotation = TAU/1;
-		
+		float rotation = TAU/1;
+//		
 //		good model
 //		modelMatrix.translate(offset).rotateZ(rotation).scale(scale);
 		
 //		spinning house around 
-		modelMatrix.translate(OFFSET).scale(SCALE);
+//		modelMatrix.translate(OFFSET).scale(SCALE);
 		
 		
 		// T R S Order Trans Rotate Scale
-//		Vector2f offset = new Vector2f(0.0f, 0.0f);
-//		Vector2f scale = new Vector2f(0.1f, 0.1f);
-//		
-//		translationMatrix(offset.x, offset.y, transMatrix);
-//		rotationMatrix(rotation, rotMatrix);
-//		scaleMatrix(scale.x, scale.y, scalMatrix);
-//		
-//		modelMatrix.mul(transMatrix).mul(rotMatrix).mul(scalMatrix);
+		Vector2f offset = new Vector2f(0.78f, 0.0f);
+		Vector2f scale = new Vector2f(0.1f, 0.1f);
+		
+		translationMatrix(offset.x, offset.y, transMatrix);
+		rotationMatrix(rotation, rotMatrix);
+		scaleMatrix(scale.x, scale.y, scalMatrix);
+		
+		modelMatrix.mul(transMatrix).mul(rotMatrix).mul(scalMatrix);
 		
 		
 		
